@@ -9,6 +9,8 @@ pipeline {
         booleanParam(name: 'TF_PLAN', defaultValue: false, description: 'Run terraform plan')
         booleanParam(name: 'TF_APPLY', defaultValue: false, description: 'Run terraform apply')
         booleanParam(name: 'TF_DESTROY', defaultValue: false, description: 'Run terraform destroy')
+        choice(name: 'TF_ACTION', choices: ['create', 'update'], description: 'Select the Terraform action'
+    )
     }
     stages {
         stage('Prerequisite') {
@@ -54,16 +56,37 @@ pipeline {
             }
         }
         stage('Terraform Apply') {
-            when {
-                expression { params.TF_APPLY }
-            }
-            steps {
-                sh '''
+          when {
+            expression { params.TF_APPLY }
+          }
+          steps {
+            script {
+              def targets = []
+              if (params.TF_ACTION == 'create') {
+                // resource blocks as targets
+                targets = [
+                  "aws_db_subnet_group.example",
+                  "aws_security_group.scc_postgres_dbsg"
+                ]
+              } else if (params.TF_ACTION == 'update') {
+                // data blocks as targets
+                targets = [
+                  "data.aws_db_subnet_group.selected",
+                  "data.aws_security_group.selected"
+                ]
+              } else {
+                error "Invalid TF_ACTION: ${params.TF_ACTION}. Must be 'create' or 'update'."
+              }
+              def targetArgs = targets.collect { "-target=${it}" }.join(' ')
+              sh """
                 cd aws_rds_terraform
-                terraform apply --auto-approve
-                '''
+                terraform apply ${targetArgs} --auto-approve
+              """
             }
+          }
         }
+
+
         stage('Terraform Destroy') {
             when {
                 expression { params.TF_DESTROY }

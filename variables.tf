@@ -56,6 +56,11 @@ variable "kms_key_id" {
   default     = ""
 }
 
+variable "operation" {
+  description = "Operation being performed on the databases"
+  type        = string
+}
+
 variable "engine" {
   description = "Database engine type (e.g., postgres, mysql)"
   type        = string
