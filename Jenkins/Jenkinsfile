@@ -52,5 +52,16 @@ pipeline {
                 '''
             }
         }
+        stage('Terraform Destroy') {
+            when {
+                expression { params.TF_DESTROY }
+            }
+            steps {
+                sh '''
+                cd aws_rds_terraform
+                terraform destroy --auto-approve
+                '''
+            }
+        }
     }
 }
