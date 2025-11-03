@@ -8,6 +8,7 @@ pipeline {
         booleanParam(name: 'TF_IMPORT', defaultValue: false, description: 'Run terraform import')
         booleanParam(name: 'TF_PLAN', defaultValue: false, description: 'Run terraform plan')
         booleanParam(name: 'TF_APPLY', defaultValue: false, description: 'Run terraform apply')
+        booleanParam(name: 'TF_DESTROY', defaultValue: false, description: 'Run terraform destroy')
     }
     stages {
         stage('Prerequisite') {
