@@ -28,7 +28,7 @@ storage_type     = "gp3"
 storage          = 20
 
 # ---- Security and Maintenance ----
-deletion_protection = false 
+deletion_protection = true 
 backup_period       = 1
 db_port             = 5432
 maintenance_window  = "sat:22:00-sat:22:30"

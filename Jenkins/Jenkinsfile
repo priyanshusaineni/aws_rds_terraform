@@ -67,15 +67,15 @@ pipeline {
               if (params.TF_ACTION == 'create') {
                 // resource blocks as targets
                 targets = [
-                  "aws_db_subnet_group.example",
-                  "aws_security_group.scc_postgres_dbsg",
+                //   "aws_db_subnet_group.example",
+                //   "aws_security_group.scc_postgres_dbsg",
                   "aws_db_instance.test_db"
                 ]
               } else if (params.TF_ACTION == 'update') {
                 // data blocks as targets
                 targets = [
-                  "data.aws_db_subnet_group.selected",
-                  "data.aws_security_group.selected",
+                //   "data.aws_db_subnet_group.selected",
+                //   "data.aws_security_group.selected",
                   "aws_db_instance.test_db"
                 ]
               } else {
