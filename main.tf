@@ -4,9 +4,9 @@ data "aws_vpc" "selected" {
   id = var.vpc_id
 }
   
-data "aws_db_subnet_group" "selected" {
-  name = var.subnet_group_name
-}
+# data "aws_db_subnet_group" "selected" {
+#   name = var.subnet_group_name
+# }
 
 resource "aws_db_subnet_group" "example" {
   name       = var.subnet_group_name
@@ -20,13 +20,13 @@ resource "aws_db_subnet_group" "example" {
   }
 }
 
-data "aws_security_group" "selected" {
-  filter {
-    name   = "group-name"
-    values = [var.security_group_name]
-  }
-  vpc_id = data.aws_vpc.selected.id
-}
+# data "aws_security_group" "selected" {
+#   filter {
+#     name   = "group-name"
+#     values = [var.security_group_name]
+#   }
+#   vpc_id = data.aws_vpc.selected.id
+# }
 
 # If master credentials are stored in Secrets Manager as string key:value pairs
 
