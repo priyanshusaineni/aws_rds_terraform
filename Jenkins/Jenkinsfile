@@ -31,6 +31,17 @@ pipeline {
                 '''
             }
         }
+        stage('Terraform Destroy'){
+            when {
+                expression { params.TF_IMPORT }
+            }
+            steps {
+                sh '''
+                cd aws_rds_terraform
+                terraform import 'resource.aws_db_instance.test_db' new-test-db-instance
+                '''
+            }
+        }
         stage('Terraform Plan') {
             when {
                 expression { params.TF_PLAN }
