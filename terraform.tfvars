@@ -1,6 +1,17 @@
 # ---- Network ----
 vpc_id              = "vpc-00c77f79f94607dbf"
-db_subnet_group_name = "default"
+subnet_ids = [
+    "subnet-004aa68bfe70a7672",
+    "subnet-0e09b212d51fe2268",
+    "subnet-0bf8236e7a585d68c",
+    "subnet-09c76d29723922c63",
+    "subnet-0c85bb6d62f36fb03",
+    "subnet-01607c83fb8b03858"
+  ]
+subnet_group_name        = "example-subnet-group"
+subnet_group_description = "Example subnet group for RDS"
+
+# db_subnet_group_name = 
 security_group_name  = "new-sg-1"
 # availability_zone = "ap-south-1a"         This is commented because rds requires multi azs requesting a specific az is not valid
 

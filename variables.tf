@@ -4,10 +4,27 @@ variable "vpc_id" {
   type        = string
 }
 
-variable "db_subnet_group_name" {
-  description = "Existing DB Subnet Group Name"
-  type        = string
+variable "subnet_ids" {
+  description = "List of subnet IDs for the RDS subnet group"
+  type        = list(string)
 }
+
+variable "subnet_group_name" {
+  description = "Name of the RDS subnet group"
+  type        = string
+  default     = "example-subnet-group"
+}
+
+variable "subnet_group_description" {
+  description = "Description of the RDS subnet group"
+  type        = string
+  default     = "Example subnet group for RDS"
+}
+
+# variable "db_subnet_group_name" {
+#   description = "Existing DB Subnet Group Name"
+#   type        = string
+# }
 
 variable "security_group_name" {
   description = "Name of the RDS security group"
