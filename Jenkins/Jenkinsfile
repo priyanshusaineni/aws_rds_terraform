@@ -82,6 +82,7 @@ pipeline {
                 error "Invalid TF_ACTION: ${params.TF_ACTION}. Must be 'create' or 'update'."
               }
               def targetArgs = targets.collect { "-target=${it}" }.join(' ')
+              print(targetArgs)
               sh """
                 cd aws_rds_terraform
                 terraform apply ${targetArgs} --auto-approve
