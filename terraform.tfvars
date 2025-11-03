@@ -2,7 +2,7 @@
 vpc_id              = "vpc-0801941e2a734e006"
 db_subnet_group_name = "default"
 security_group_name  = "new-sg-1"
-availability_zone = "ap-south-1a"
+# availability_zone = "ap-south-1a"         This is commented because rds requires multi azs requesting a specific az is not valid
 
 # ---- Storage and Engine ----
 db_instance_identifier = "new-test-db-instance"
@@ -17,6 +17,9 @@ deletion_protection = true
 backup_period       = 1
 db_port             = 5432
 maintenance_window  = "sat:22:00-sat:22:30"
+
+#-------User Credentials-----------
+rds_username = "db_user"
 
 # ---- Tags ----
 owner       = "ARCH-Platform"

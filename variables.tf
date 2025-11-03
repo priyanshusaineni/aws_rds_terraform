@@ -82,18 +82,24 @@ variable "maintenance_window" {
 }
 
 # ---- Admin Credentials ----
-variable "db_admin" {
-  description = "Database master username (fetched via Secrets Manager)"
-  type        = string
-  sensitive   = true
-  default     = "{{resolve:secretsmanager:rds-secrets:SecretString:new-test-db-instance-admin-user}}"
-}
+# variable "db_admin" {
+#   description = "Database master username (fetched via Secrets Manager)"
+#   type        = string
+#   sensitive   = true
+#   default     = "{{resolve:secretsmanager:rds-secrets:SecretString:new-test-db-instance-admin-user}}"
+# }
 
-variable "db_admin_pass" {
-  description = "Database master password (fetched via Secrets Manager)"
+# variable "db_admin_pass" {
+#   description = "Database master password (fetched via Secrets Manager)"
+#   type        = string
+#   sensitive   = true
+#   default     = "{{resolve:secretsmanager:rds-secrets:SecretString:new-test-db-instance-admin-password}}"
+# }
+
+
+variable "rds_username" {
+  description = "Name of the RDS Username"
   type        = string
-  sensitive   = true
-  default     = "{{resolve:secretsmanager:rds-secrets:SecretString:new-test-db-instance-admin-password}}"
 }
 
 # ---- Tags ----

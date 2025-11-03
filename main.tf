@@ -3,7 +3,7 @@
 data "aws_vpc" "selected" {
   id = var.vpc_id
 }
-
+  
 data "aws_db_subnet_group" "selected" {
   name = var.db_subnet_group_name
 }
@@ -17,16 +17,18 @@ data "aws_db_subnet_group" "selected" {
 # }
 
 # If master credentials are stored in Secrets Manager as string key:value pairs
-data "aws_secretsmanager_secret_version" "db_admin_user" {
-  secret_id = "rds-secrets"
-}
-data "aws_secretsmanager_secret_version" "db_admin_password" {
-  secret_id = "rds-secrets"
-}
-locals {
-  db_admin     = jsondecode(data.aws_secretsmanager_secret_version.db_admin_user.secret_string)["new-test-db-instance-admin-user"]
-  db_admin_pass = jsondecode(data.aws_secretsmanager_secret_version.db_admin_password.secret_string)["new-test-db-instance-admin-password"]
-}
+
+# ---- 1st approach where we are assigning the master user credentials through already existing username and password from aws secrets manager
+# data "aws_secretsmanager_secret_version" "db_admin_user" {
+#   secret_id = "rds-secrets"
+# }
+# data "aws_secretsmanager_secret_version" "db_admin_password" {
+#   secret_id = "rds-secrets"
+# }
+# locals {
+#   db_admin     = jsondecode(data.aws_secretsmanager_secret_version.db_admin_user.secret_string)["new-test-db-instance-admin-user"]
+#   db_admin_pass = jsondecode(data.aws_secretsmanager_secret_version.db_admin_password.secret_string)["new-test-db-instance-admin-password"]
+# }
 
 # ---- RDS Security Group ----
 resource "aws_security_group" "scc_postgres_dbsg" {
@@ -49,22 +51,29 @@ resource "aws_security_group" "scc_postgres_dbsg" {
   }
 }
 
-# ---- RDS Instance ----
+# ---- RDS Instance ----  
 resource "aws_db_instance" "test_db" {
   allocated_storage         = var.storage
   storage_type              = var.storage_type
-  availability_zone         = var.availability_zone
+  # availability_zone         = var.availability_zone
   backup_retention_period   = var.backup_period
-  instance_class         = var.db_instance_class
-  identifier    = var.db_instance_identifier
+  instance_class            = var.db_instance_class
+  identifier                = var.db_instance_identifier
   db_subnet_group_name      = data.aws_db_subnet_group.selected.name
   deletion_protection       = var.deletion_protection
   engine                    = var.engine
   engine_version            = var.engine_version
-  username           = local.db_admin
-  password           = local.db_admin_pass
+
+  # 1st approach
+  # username                  = local.db_admin_user
+  # password                  = local.db_admin_pass
+
+  #standard approach
+  username = var.rds_username  
+  manage_master_user_password = true
+  
   port                      = var.db_port
-  maintenance_window = var.maintenance_window
+  maintenance_window        = var.maintenance_window
   publicly_accessible       = false
   storage_encrypted         = true
   auto_minor_version_upgrade = true
