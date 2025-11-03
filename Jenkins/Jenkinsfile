@@ -61,34 +61,57 @@ pipeline {
           when {
             expression { params.TF_APPLY }
           }
-          steps {
-            script {
-              def targets = []
-              if (params.TF_ACTION == 'create') {
-                // resource blocks as targets
-                targets = [
-                  "aws_db_subnet_group.example",
-                  "aws_security_group.scc_postgres_dbsg",
-                  "aws_db_instance.test_db"
-                ]
-              } else if (params.TF_ACTION == 'update') {
-                // data blocks as targets
-                targets = [
-                //   "data.aws_db_subnet_group.selected",
-                //   "data.aws_security_group.selected",
-                  "aws_db_instance.test_db"
-                ]
-              } else {
-                error "Invalid TF_ACTION: ${params.TF_ACTION}. Must be 'create' or 'update'."
-              }
-              def targetArgs = targets.collect { "-target=${it}" }.join(' ')
-              print(targetArgs)
-              sh """
-                cd aws_rds_terraform
-                terraform apply ${targetArgs} --auto-approve
-              """
-            }
-          }
+        //   steps {
+        //     script {
+        //       def targets = []
+        //       if (params.TF_ACTION == 'create') {
+        //         // resource blocks as targets
+        //         targets = [
+                  
+        //         ]
+        //       } else if (params.TF_ACTION == 'update') {
+        //         // data blocks as targets
+        //         targets = [
+        //         //   "data.aws_db_subnet_group.selected",
+        //         //   "data.aws_security_group.selected",
+        //           "aws_db_instance.test_db"
+        //         ]
+        //       } else {
+        //         error "Invalid TF_ACTION: ${params.TF_ACTION}. Must be 'create' or 'update'."
+        //       }
+        //       def targetArgs = targets.collect { "-target=${it}" }.join(' ')
+        //       print(targetArgs)
+        //       sh """
+        //         cd aws_rds_terraform
+        //         terraform apply ${targetArgs} --auto-approve
+        //       """
+        //     }
+        //   }
+        steps {
+  script {
+    if (params.TF_ACTION == 'create') {
+      // For create, run full terraform apply
+      sh '''
+        cd aws_rds_terraform
+        terraform apply --auto-approve
+      '''
+    } else if (params.TF_ACTION == 'update') {
+      // For update, run terraform apply with targets
+      def targets = [
+        "aws_db_instance.test_db"
+      ]
+      def targetArgs = targets.collect { "-target=${it}" }.join(' ')
+      echo "Running terraform apply with targets: ${targetArgs}"
+      sh """
+        cd aws_rds_terraform
+        terraform apply ${targetArgs} --auto-approve
+      """
+    } else {
+      error "Invalid TF_ACTION: ${params.TF_ACTION}. Must be 'create' or 'update'."
+    }
+  }
+}
+
         }
 
 
