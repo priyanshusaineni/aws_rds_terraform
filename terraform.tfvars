@@ -1,5 +1,5 @@
 # ---- Network ----
-vpc_id              = "vpc-0801941e2a734e006"
+vpc_id              = "vpc-00c77f79f94607dbf"
 db_subnet_group_name = "default"
 security_group_name  = "new-sg-1"
 # availability_zone = "ap-south-1a"         This is commented because rds requires multi azs requesting a specific az is not valid
