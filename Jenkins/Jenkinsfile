@@ -71,8 +71,8 @@ pipeline {
               } else if (params.TF_ACTION == 'update') {
                 // data blocks as targets
                 targets = [
-                  "data.aws_db_subnet_group.selected",
-                  "data.aws_security_group.selected",
+                //   "data.aws_db_subnet_group.selected",
+                //   "data.aws_security_group.selected",
                   "aws_db_instance.test_db"
                 ]
               } else {
