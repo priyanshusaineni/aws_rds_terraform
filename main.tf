@@ -71,8 +71,9 @@ resource "aws_db_instance" "test_db" {
   backup_retention_period   = var.backup_period
   instance_class            = var.db_instance_class
   identifier                = var.db_instance_identifier
-  db_subnet_group_name      = var.operation == "update" ? data.aws_db_subnet_group.selected.name : aws_db_subnet_group.example.name                          # = data.aws_db_subnet_group.selected.name           Use If you are reading it with data block
-  deletion_protection       = var.deletion_protection
+  # db_subnet_group_name      = var.operation == "update" ? data.aws_db_subnet_group.selected.name : aws_db_subnet_group.example.name                          # = data.aws_db_subnet_group.selected.name           Use If you are reading it with data block
+  
+  db_subnet_group_name = aws_db_subnet_group.example
   engine                    = var.engine
   engine_version            = var.engine_version
 
