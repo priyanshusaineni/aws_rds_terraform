@@ -9,8 +9,7 @@ pipeline {
         booleanParam(name: 'TF_PLAN', defaultValue: false, description: 'Run terraform plan')
         booleanParam(name: 'TF_APPLY', defaultValue: false, description: 'Run terraform apply')
         booleanParam(name: 'TF_DESTROY', defaultValue: false, description: 'Run terraform destroy')
-        choice(name: 'TF_ACTION', choices: ['create', 'update'], description: 'Select the Terraform action'
-    )
+        choice(name: 'TF_ACTION', choices: ['create', 'update', 'none'], description: 'Select the Terraform action')
     }
     stages {
         stage('Prerequisite') {
