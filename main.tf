@@ -91,7 +91,8 @@ resource "aws_db_instance" "test_db" {
   auto_minor_version_upgrade = true
   copy_tags_to_snapshot     = true
   delete_automated_backups  = false
-  vpc_security_group_ids    = var.operation == "create" ? [aws_security_group.scc_postgres_dbsg.id] : [data.aws_security_group.selected.id]
+  # vpc_security_group_ids    = var.operation == "create" ? [aws_security_group.scc_postgres_dbsg.id] : [data.aws_security_group.selected.id]
+  vpc_security_group_ids = [aws_security_group.scc_postgres_dbsg]
   skip_final_snapshot       = true
   multi_az = true
 
