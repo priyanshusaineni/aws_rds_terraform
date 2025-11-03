@@ -1,5 +1,5 @@
 # ---- Operation ----
-operation = "update"  #Switch between create and update 
+operation = "create"  #Switch between create and update 
 
 # ---- Network ----
 vpc_id              = "vpc-00c77f79f94607dbf"
