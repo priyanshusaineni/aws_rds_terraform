@@ -67,8 +67,8 @@ pipeline {
               if (params.TF_ACTION == 'create') {
                 // resource blocks as targets
                 targets = [
-                //   "aws_db_subnet_group.example",
-                //   "aws_security_group.scc_postgres_dbsg",
+                  "aws_db_subnet_group.example",
+                  "aws_security_group.scc_postgres_dbsg",
                   "aws_db_instance.test_db"
                 ]
               } else if (params.TF_ACTION == 'update') {
@@ -96,9 +96,15 @@ pipeline {
                 expression { params.TF_DESTROY }
             }
             steps {
+                script {
+                    targets = [
+                     "aws_db_instance.test_db"
+                    ]
+                    def targetArgs = targets.collect { "-target=${it}" }.join(' ')
+                }
                 sh '''
                 cd aws_rds_terraform
-                terraform destroy --auto-approve
+                terraform destroy ${targetArgs} --auto-approve
                 '''
             }
         }
