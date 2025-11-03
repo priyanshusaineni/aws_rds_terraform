@@ -73,7 +73,7 @@ resource "aws_db_instance" "test_db" {
   identifier                = var.db_instance_identifier
   # db_subnet_group_name      = var.operation == "update" ? data.aws_db_subnet_group.selected.name : aws_db_subnet_group.example.name                          # = data.aws_db_subnet_group.selected.name           Use If you are reading it with data block
   
-  db_subnet_group_name = aws_db_subnet_group.example
+  db_subnet_group_name = aws_db_subnet_group.example.name
   engine                    = var.engine
   engine_version            = var.engine_version
 
@@ -93,7 +93,7 @@ resource "aws_db_instance" "test_db" {
   copy_tags_to_snapshot     = true
   delete_automated_backups  = false
   # vpc_security_group_ids    = var.operation == "create" ? [aws_security_group.scc_postgres_dbsg.id] : [data.aws_security_group.selected.id]
-  vpc_security_group_ids = [aws_security_group.scc_postgres_dbsg]
+  vpc_security_group_ids = [aws_security_group.scc_postgres_dbsg.id]
   skip_final_snapshot       = true
   multi_az = true
 
