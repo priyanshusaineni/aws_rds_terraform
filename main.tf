@@ -96,6 +96,7 @@ resource "aws_db_instance" "test_db" {
   skip_final_snapshot       = true
   multi_az = true
 
+  kms_key_id = var.kms_key_id
   tags = {
     # SCC_Jenkins = "T"
     Name        = var.name

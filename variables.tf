@@ -50,6 +50,12 @@ variable "availability_zone" {
   default     = "us-east-1a"
 }
 
+variable "kms_key_id" {
+  description = "KMS key id"
+  type        = string
+  default     = ""
+}
+
 variable "engine" {
   description = "Database engine type (e.g., postgres, mysql)"
   type        = string

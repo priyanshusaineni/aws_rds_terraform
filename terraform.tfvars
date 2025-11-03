@@ -11,6 +11,7 @@ subnet_ids = [
 subnet_group_name        = "example-subnet-group"
 subnet_group_description = "Example subnet group for RDS"
 
+kms_key_id = "custom_kms"
 # db_subnet_group_name = 
 security_group_name  = "new-sg-1"
 # availability_zone = "ap-south-1a"         This is commented because rds requires multi azs requesting a specific az is not valid
