@@ -41,7 +41,7 @@ pipeline {
                 cd aws_rds_terraform
                 terraform import 'resource.aws_db_instance.test_db' new-test-db-instance
                 terraform import 'aws_db_subnet_group.example' example-subnet-group 
-                terraform import 'aws_security_group.scc_postgres_dbsg' new-sg-11
+                terraform import 'aws_security_group.scc_postgres_dbsg' sg-0aaf593f61c9c3b59
 
                 '''
             }
