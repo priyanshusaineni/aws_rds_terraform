@@ -18,8 +18,12 @@ pipeline {
 
         booleanParam(name: 'TF_PLAN', defaultValue: false, description: 'Run terraform plan')
         booleanParam(name: 'TF_APPLY', defaultValue: false, description: 'Run terraform apply')
-        booleanParam(name: 'TF_DESTROY', defaultValue: false, description: 'Run terraform destroy')
         choice(name: 'TF_ACTION', choices: ['none', 'create', 'update'], description: 'Select the Terraform action')
+
+        booleanParam(name: 'TF_DESTROY', defaultValue: false, description: 'Run terraform destroy')
+        booleanParam(name: 'DELETE_RDS_INSTANCE', defaultValue: false, description: 'Delete RDS Instance')
+        booleanParam(name: 'DELETE_SUBNET_GROUP', defaultValue: false, description: 'Delete Subnet Group')
+        booleanParam(name: 'DELETE_SECURITY_GROUP', defaultValue: false, description: 'Delete Security Group')
     }
     stages {
         stage('Prerequisite') {
@@ -121,11 +125,21 @@ pipeline {
           }
           steps {
             script {
-              def targets = [
-                "aws_db_instance.test_db",
-                "aws_security_group.scc_postgres_dbsg",
-                "aws_db_subnet_group.example"
-              ]
+                def targets = []
+              if (params.DELETE_RDS_INSTANCE) {
+                  targets.add("aws_db_instance.test_db")
+              }
+              if(params.DELETE_SUBNET_GROUP){
+                   targets.add("aws_db_subnet_group.example")
+              }
+              if(params.DELETE_SECURITY_GROUP){
+                    targets.add("aws_security_group.scc_postgres_dbsg")
+              }
+            //   def targets = [
+            //     "aws_db_instance.test_db",
+            //     "aws_security_group.scc_postgres_dbsg",
+            //     "aws_db_subnet_group.example"
+            //   ]
               def targetArgs = targets.collect { "-target=${it}" }.join(' ')
               echo "Terraform destroy targets: ${targetArgs}"
               sh """
