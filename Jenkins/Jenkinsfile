@@ -52,17 +52,22 @@ pipeline {
                 sh 'cd aws_rds_terraform'
 
                 if (params.IMPORT_DB_INSTANCE) {
-                  sh "terraform import resource.aws_db_instance.test_db ${params.DB_INSTANCE_ID}"
+                  sh '''
+                  cd aws_rds_terraform
+                  terraform import resource.aws_db_instance.test_db ${params.DB_INSTANCE_ID}
+                  '''
                 }
                 if (params.IMPORT_SUBNET_GROUP) {
                   sh '''
-                  ls
-                  pwd
+                  cd aws_rds_terraform
                   terraform import resource.aws_db_subnet_group.example ${params.SUBNET_GROUP_NAME}
                   '''
                 }
                 if (params.IMPORT_SECURITY_GROUP) {
-                  sh "terraform import resource.aws_security_group.scc_postgres_dbsg ${params.SECURITY_GROUP_ID}"
+                  sh '''
+                  cd aws_rds_terraform
+                  terraform import resource.aws_security_group.scc_postgres_dbsg ${params.SECURITY_GROUP_ID}
+                  '''
                 }
               }
             }
