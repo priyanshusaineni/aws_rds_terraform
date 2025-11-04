@@ -8,7 +8,7 @@ subnet_ids = [
     "subnet-0e09b212d51fe2268",
     "subnet-0bf8236e7a585d68c",
     "subnet-09c76d29723922c63",
-    "subnet-0c85bb6d62f36fb03",
+    # "subnet-0c85bb6d62f36fb03",
     "subnet-01607c83fb8b03858"
   ]
 subnet_group_name        = "example-subnet-group"
