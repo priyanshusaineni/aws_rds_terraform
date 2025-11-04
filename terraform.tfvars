@@ -17,7 +17,6 @@ subnet_group_name        = "terraform-subnet-group"
 subnet_group_description = "Example subnet group for RDS"
 multi_az = true
 
-# kms_key_id = "arn:aws:kms:us-east-1:600802700666:key/7b0bdc95-7113-4b6c-a17b-f015a51f7c1a"
 security_group_name  = "terraform-sg"
 security_group_description = "Enable Postgres access"
 # availability_zone = "ap-south-1a"         This is commented because rds requires multi azs requesting a specific az is not valid
