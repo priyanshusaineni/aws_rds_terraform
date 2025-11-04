@@ -3,10 +3,8 @@
 data "aws_vpc" "selected" {
   id = var.vpc_id
 }
-  
 # data "aws_db_subnet_group" "selected" {
-#   # count = var.operation == "create" ? 0: 1
-#   count = 0
+#   count = var.create_subnet_group ? 0 : 1
 #   name = var.subnet_group_name
 # }
 
@@ -15,7 +13,7 @@ resource "aws_db_subnet_group" "example" {
   subnet_ids = var.subnet_ids
   description = var.subnet_group_description
   tags = {
-    SCC_Jenkins = "T"
+    SCC_Jenkins = var.scc_jenkins
     Owner       = var.owner
     CostCenter  = var.cost_center
     Environment = var.environment
@@ -23,6 +21,7 @@ resource "aws_db_subnet_group" "example" {
 }
 
 # data "aws_security_group" "selected" {
+#   count = var.create_security_group ? 0 : 1 
 #   filter {
 #     name   = "group-name"
 #     values = [var.security_group_name]
@@ -47,18 +46,18 @@ resource "aws_db_subnet_group" "example" {
 # ---- RDS Security Group ----
 resource "aws_security_group" "scc_postgres_dbsg" {
   name        = var.security_group_name
-  description = "Enable PostgreSQL access"
+  description = var.security_group_description
   vpc_id      = data.aws_vpc.selected.id
 
   ingress {
-    from_port   = 5423
-    to_port     = 5432
-    protocol    = "tcp"
-    cidr_blocks = ["10.0.0.0/8"]  
+    from_port   = var.ingress_from_port
+    to_port     = var.ingress_to_port
+    protocol    = var.ingress_protocol
+    cidr_blocks = var.ingress_cidr_blocks  
   }
 
   tags = {
-    SCC_Jenkins = "T"
+    SCC_Jenkins = var.scc_jenkins
     Owner       = var.owner
     CostCenter  = var.cost_center
     Environment = var.environment
@@ -85,23 +84,23 @@ resource "aws_db_instance" "test_db" {
 
   #standard approach
   username = var.rds_username  
-  manage_master_user_password = true
+  manage_master_user_password = var.manage_master_user_password
 
   port                      = var.db_port
   maintenance_window        = var.maintenance_window
-  publicly_accessible       = false
-  storage_encrypted         = true
-  auto_minor_version_upgrade = true
-  copy_tags_to_snapshot     = true
-  delete_automated_backups  = false
+  publicly_accessible       = var.publicly_accessible
+  storage_encrypted         = var.storage_encrypted
+  auto_minor_version_upgrade = var.auto_minor_version_upgrade
+  copy_tags_to_snapshot     = var.copy_tags_to_snapshot
+  delete_automated_backups  = var.delete_automated_backups
   # vpc_security_group_ids    = var.operation == "create" ? [aws_security_group.scc_postgres_dbsg.id] : [data.aws_security_group.selected.id]
   vpc_security_group_ids = [aws_security_group.scc_postgres_dbsg.id]
-  skip_final_snapshot       = true
-  multi_az = true
+  skip_final_snapshot       = var.skip_final_snapshot
+  multi_az = var.multi_az
 
   kms_key_id = var.kms_key_id
   tags = {
-    # SCC_Jenkins = "T"
+    SCC_Jenkins = var.scc_jenkins
     Name        = var.name
     Owner       = var.owner
     CostCenter  = var.cost_center

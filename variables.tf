@@ -1,3 +1,13 @@
+variable "create_subnet_group" {
+  description = "To verify subnet group needs to be created"
+  type = bool
+}
+
+variable "create_security_group" {
+  description = "To verify security group needs to be created"
+  type = bool
+}
+
 # ---- VPC and Network ----
 variable "vpc_id" {
   description = "The ID of the existing VPC where RDS will be deployed"
@@ -29,6 +39,31 @@ variable "subnet_group_description" {
 variable "security_group_name" {
   description = "Name of the RDS security group"
   type        = string
+}
+
+variable "security_group_description" {
+  description = "Description of the Security Group"
+  type = string
+}
+
+variable "ingress_from_port" {
+  description = "The starting port for the ingress rule"
+  type        = number
+}
+
+variable "ingress_to_port" {
+  description = "The ending port for the ingress rule"
+  type        = number
+}
+
+variable "ingress_protocol" {
+  description = "The protocol for the ingress rule (e.g., tcp, udp)"
+  type        = string
+}
+
+variable "ingress_cidr_blocks" {
+  description = "List of CIDR blocks to allow ingress from"
+  type        = list(string)
 }
 
 # ---- RDS Instance Parameters ----
@@ -109,6 +144,41 @@ variable "maintenance_window" {
   default     = "sat:22:00-sat:22:30"
 }
 
+variable "publicly_accessible" {
+  description = "Bool to control if instance is publicly accessible"
+  type        = bool
+}
+
+variable "storage_encrypted" {
+  description = "Specifies whether the DB instance is encrypted"
+  type        = bool
+}
+
+variable "auto_minor_version_upgrade" {
+  description = "Indicates that minor engine upgrades will be applied automatically to the DB instance during the maintenance window"
+  type        = bool
+}
+
+variable "copy_tags_to_snapshot" {
+  description = "On delete, copy all Instance tags to the final snapshot"
+  type        = bool
+}
+
+variable "delete_automated_backups" {
+  description = "Specifies whether to remove automated backups immediately after the DB instance is deleted"
+  type        = bool
+}
+
+variable "skip_final_snapshot" {
+  description = "Determines whether a final DB snapshot is created before the DB instance is deleted. If true is specified, no DBSnapshot is created. If false is specified, a DB snapshot is created before the DB instance is deleted"
+  type        = bool
+}
+
+variable "multi_az" {
+  description = "Specifies if the RDS instance is multi-AZ"
+  type        = bool
+}
+
 # ---- Admin Credentials ----
 # variable "db_admin" {
 #   description = "Database master username (fetched via Secrets Manager)"
@@ -128,6 +198,11 @@ variable "maintenance_window" {
 variable "rds_username" {
   description = "Name of the RDS Username"
   type        = string
+}
+
+variable "manage_master_user_password" {
+  description = "Enables or Disables managing master user credentials within AWS"
+  type = string
 }
 
 # ---- Tags ----
@@ -153,4 +228,9 @@ variable "name" {
   description = "Tag: Name for RDS instance"
   type        = string
   default     = "new-test-db-instance"
+}
+
+variable "scc_jenkins" {
+  description = "Tag: SCC Jenkins" 
+  type = string
 }

@@ -1,5 +1,7 @@
 # ---- Operation ----
 operation = "create"  #Switch between create and update 
+create_subnet_group = false
+create_security_group = false
 
 # ---- Network ----
 vpc_id              = "vpc-00c77f79f94607dbf"
@@ -13,11 +15,18 @@ subnet_ids = [
   ]
 subnet_group_name        = "terraform-subnet-group"
 subnet_group_description = "Example subnet group for RDS"
+multi_az = true
 
 kms_key_id = "arn:aws:kms:us-east-1:600802700666:key/7b0bdc95-7113-4b6c-a17b-f015a51f7c1a"
-# db_subnet_group_name = 
 security_group_name  = "terraform-sg"
+security_group_description = "Enable Postgres access"
 # availability_zone = "ap-south-1a"         This is commented because rds requires multi azs requesting a specific az is not valid
+
+ingress_from_port   = 5423
+ingress_to_port     = 5432
+ingress_protocol    = "tcp"
+ingress_cidr_blocks = ["10.0.0.0/8"] 
+
 
 # ---- Storage and Engine ----
 db_instance_identifier = "new-test-db-instance"
@@ -26,18 +35,26 @@ engine           = "postgres"
 engine_version   = "17.5"
 storage_type     = "gp3"
 storage          = 20
+copy_tags_to_snapshot     = true
+delete_automated_backups  = false
+skip_final_snapshot       = true
 
 # ---- Security and Maintenance ----
 deletion_protection = false 
 backup_period       = 1
 db_port             = 5432
 maintenance_window  = "sat:22:00-sat:22:30"
+publicly_accessible       = false
+storage_encrypted         = true
+auto_minor_version_upgrade = true
 
-#-------User Credentials-----------
+#-------User Credentials Management----------
 rds_username = "db_user"
+manage_master_user_password = true
 
 # ---- Tags ----
 owner       = "ARCH-Platform"
 cost_center = "615110"
 environment = "DEV"
 name        = "new-test-db-instance"
+scc_jenkins = "T"
