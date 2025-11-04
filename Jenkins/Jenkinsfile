@@ -38,6 +38,7 @@ pipeline {
             steps {
                 sh '''
                 cd aws_rds_terraform
+                ls
                 terraform init
                 '''
             }
