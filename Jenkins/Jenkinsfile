@@ -10,13 +10,6 @@ pipeline {
         booleanParam(name: 'TF_APPLY', defaultValue: false, description: 'Run terraform apply')
         booleanParam(name: 'TF_DESTROY', defaultValue: false, description: 'Run terraform destroy')
         choice(name: 'TF_ACTION', choices: ['create', 'update', 'none'], description: 'Select the Terraform action')
-          extendedChoice(
-            name: 'IMPORT_RESOURCES',
-            type: 'PT_MULTI_SELECT',
-            multiSelectDelimiter: ',',
-            description: 'Select resources to import',
-            value: 'db_instance,subnet_group,security_group'
-           )
     }
     stages {
         stage('Prerequisite') {
