@@ -7,6 +7,9 @@ data "aws_vpc" "selected" {
 #   count = var.create_subnet_group ? 0 : 1
 #   name = var.subnet_group_name
 # }
+data "aws_kms_key" "example" {
+  key_id = "alias/custom_kms"  
+}
 
 resource "aws_db_subnet_group" "example" {
   name       = var.subnet_group_name
@@ -98,7 +101,7 @@ resource "aws_db_instance" "test_db" {
   skip_final_snapshot       = var.skip_final_snapshot
   multi_az = var.multi_az
 
-  kms_key_id = var.kms_key_id
+  kms_key_id = data.aws_kms_key.example.key_id
   tags = {
     SCC_Jenkins = var.scc_jenkins
     Name        = var.name
