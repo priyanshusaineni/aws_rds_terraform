@@ -115,22 +115,42 @@ pipeline {
         }
 
 
+        // stage('Terraform Destroy') {
+        //     when {
+        //         expression { params.TF_DESTROY }
+        //     }
+        //     steps {
+        //         script {
+        //             def targets = [
+        //              "aws_db_instance.test_db"
+        //             ]
+        //             def targetArgs = targets.collect { "-target=${it}" }.join(' ')
+        //         }
+        //         sh '''
+        //         cd aws_rds_terraform
+        //         terraform destroy ${targetArgs} --auto-approve
+        //         '''
+        //     }
+        // }
+
         stage('Terraform Destroy') {
-            when {
-                expression { params.TF_DESTROY }
-            }
-            steps {
-                script {
-                    def targets = [
-                     "aws_db_instance.test_db"
-                    ]
-                    def targetArgs = targets.collect { "-target=${it}" }.join(' ')
-                }
-                sh '''
-                cd aws_rds_terraform
-                terraform destroy ${targetArgs} --auto-approve
-                '''
-            }
-        }
+  when {
+    expression { params.TF_DESTROY }
+  }
+  steps {
+    script {
+      def targets = [
+        "aws_db_instance.test_db"
+      ]
+      def targetArgs = targets.collect { "-target=${it}" }.join(' ')
+      echo "Terraform destroy targets: ${targetArgs}"
+      sh """
+        cd aws_rds_terraform
+        terraform destroy ${targetArgs} --auto-approve
+      """
+    }
+  }
+}
+
     }
 }
