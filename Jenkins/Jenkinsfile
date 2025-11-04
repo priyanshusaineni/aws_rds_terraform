@@ -49,8 +49,6 @@ pipeline {
             }
             steps {
               script {
-                sh 'cd aws_rds_terraform'
-
                 if (params.IMPORT_DB_INSTANCE) {
                   sh '''
                   cd aws_rds_terraform
@@ -98,9 +96,12 @@ pipeline {
                   '''
                 } else if (params.TF_ACTION == 'update') {
                   // For update, run terraform apply with targets
+
+                  //Add other targets subnet_group and security_group if there are any changes in them
                   def targets = [
                     "aws_db_instance.test_db"
                   ]
+
                   def targetArgs = targets.collect { "-target=${it}" }.join(' ')
                   echo "Running terraform apply with targets: ${targetArgs}"
                   sh """
