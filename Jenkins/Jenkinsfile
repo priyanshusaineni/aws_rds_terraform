@@ -6,10 +6,20 @@ pipeline {
     parameters {
         booleanParam(name: 'TF_INIT', defaultValue: false, description: 'Run terraform init')
         booleanParam(name: 'TF_IMPORT', defaultValue: false, description: 'Run terraform import')
+      
+        booleanParam(name: 'IMPORT_DB_INSTANCE', defaultValue: false, description: 'Import DB Instance?')
+        string(name: 'DB_INSTANCE_ID', defaultValue: 'new-test-db-instance', description: 'DB Instance ID')
+  
+        booleanParam(name: 'IMPORT_SUBNET_GROUP', defaultValue: false, description: 'Import Subnet Group?')
+        string(name: 'SUBNET_GROUP_NAME', defaultValue: 'example-subnet-group', description: 'Subnet Group Name')
+  
+        booleanParam(name: 'IMPORT_SECURITY_GROUP', defaultValue: false, description: 'Import Security Group?')
+        string(name: 'SECURITY_GROUP_ID', defaultValue: 'sg-0fa56eb26a8b66557', description: 'Security Group ID')
+
         booleanParam(name: 'TF_PLAN', defaultValue: false, description: 'Run terraform plan')
         booleanParam(name: 'TF_APPLY', defaultValue: false, description: 'Run terraform apply')
         booleanParam(name: 'TF_DESTROY', defaultValue: false, description: 'Run terraform destroy')
-        choice(name: 'TF_ACTION', choices: ['create', 'update', 'none'], description: 'Select the Terraform action')
+        choice(name: 'TF_ACTION', choices: ['none', 'create', 'update'], description: 'Select the Terraform action')
     }
     stages {
         stage('Prerequisite') {
@@ -32,19 +42,27 @@ pipeline {
                 '''
             }
         }
-        stage('Terraform Import'){
+        stage('Terraform Import') {
             when {
-                expression { params.TF_IMPORT }
+              expression { params.TF_IMPORT }
             }
             steps {
-                sh '''
-                cd aws_rds_terraform
-                terraform import 'resource.aws_db_instance.test_db' new-test-db-instance
-                terraform import 'aws_db_subnet_group.example' example-subnet-group 
-                terraform import 'aws_security_group.scc_postgres_dbsg' sg-0fa56eb26a8b66557
-                '''
+              script {
+                sh 'cd aws_rds_terraform'
+
+                if (params.IMPORT_DB_INSTANCE) {
+                  sh "terraform import resource.aws_db_instance.test_db ${params.DB_INSTANCE_ID}"
+                }
+                if (params.IMPORT_SUBNET_GROUP) {
+                  sh "terraform import aws_db_subnet_group.example ${params.SUBNET_GROUP_NAME}"
+                }
+                if (params.IMPORT_SECURITY_GROUP) {
+                  sh "terraform import aws_security_group.scc_postgres_dbsg ${params.SECURITY_GROUP_ID}"
+                }
+              }
             }
         }
+
         stage('Terraform Plan') {
             when {
                 expression { params.TF_PLAN }
