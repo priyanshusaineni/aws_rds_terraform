@@ -11,12 +11,12 @@ subnet_ids = [
     # "subnet-0c85bb6d62f36fb03",
     "subnet-01607c83fb8b03858"
   ]
-subnet_group_name        = "example-subnet-group"
+subnet_group_name        = "terraform-subnet-group"
 subnet_group_description = "Example subnet group for RDS"
 
 kms_key_id = "arn:aws:kms:us-east-1:600802700666:key/7b0bdc95-7113-4b6c-a17b-f015a51f7c1a"
 # db_subnet_group_name = 
-security_group_name  = "new-sg-11"
+security_group_name  = "terraform-sg"
 # availability_zone = "ap-south-1a"         This is commented because rds requires multi azs requesting a specific az is not valid
 
 # ---- Storage and Engine ----
