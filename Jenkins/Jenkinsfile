@@ -122,7 +122,9 @@ pipeline {
           steps {
             script {
               def targets = [
-                "aws_db_instance.test_db"
+                "aws_db_instance.test_db",
+                "aws_security_group.scc_postgres_dbsg",
+                "aws_db_subnet_group.example"
               ]
               def targetArgs = targets.collect { "-target=${it}" }.join(' ')
               echo "Terraform destroy targets: ${targetArgs}"
