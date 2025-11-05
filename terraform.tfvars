@@ -39,7 +39,7 @@ delete_automated_backups  = false
 skip_final_snapshot       = true
 
 # ---- Security and Maintenance ----
-deletion_protection = true 
+deletion_protection = false 
 backup_period       = 1
 db_port             = 5432
 maintenance_window  = "sat:22:00-sat:22:30"
