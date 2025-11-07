@@ -20,13 +20,13 @@ multi_az = true
 security_group_name  = "new-sg-1"
 
 #Security group will not be created every time 
-# security_group_description = "Enable Postgres access"
-# # availability_zone = "ap-south-1a"         This is commented because rds requires multi azs requesting a specific az is not valid
+security_group_description = "Enable Postgres access"
+# availability_zone = "ap-south-1a"         This is commented because rds requires multi azs requesting a specific az is not valid
 
-# ingress_from_port   = 5423
-# ingress_to_port     = 5432
-# ingress_protocol    = "tcp"
-# ingress_cidr_blocks = ["10.0.0.0/8"] 
+ingress_from_port   = 5423
+ingress_to_port     = 5432
+ingress_protocol    = "tcp"
+ingress_cidr_blocks = ["10.0.0.0/8"] 
 
 
 # ---- Storage and Engine ----
