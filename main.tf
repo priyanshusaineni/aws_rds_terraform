@@ -23,14 +23,14 @@ resource "aws_db_subnet_group" "example" {
   }
 }
 
-# data "aws_security_group" "selected" {
-#   count = var.create_security_group ? 0 : 1 
-#   filter {
-#     name   = "group-name"
-#     values = [var.security_group_name]
-#   }
-#   vpc_id = data.aws_vpc.selected.id
-# }
+data "aws_security_group" "selected" {
+  count = var.create_security_group ? 0 : 1 
+  filter {
+    name   = "group-name"
+    values = [var.security_group_name]
+  }
+  vpc_id = data.aws_vpc.selected.id
+}
 
 # If master credentials are stored in Secrets Manager as string key:value pairs
 
@@ -47,25 +47,25 @@ resource "aws_db_subnet_group" "example" {
 # }
 
 # ---- RDS Security Group ----
-resource "aws_security_group" "scc_postgres_dbsg" {
-  name        = var.security_group_name
-  description = var.security_group_description
-  vpc_id      = data.aws_vpc.selected.id
+# resource "aws_security_group" "scc_postgres_dbsg" {
+#   name        = var.security_group_name
+#   description = var.security_group_description
+#   vpc_id      = data.aws_vpc.selected.id
 
-  ingress {
-    from_port   = var.ingress_from_port
-    to_port     = var.ingress_to_port
-    protocol    = var.ingress_protocol
-    cidr_blocks = var.ingress_cidr_blocks  
-  }
+#   ingress {
+#     from_port   = var.ingress_from_port
+#     to_port     = var.ingress_to_port
+#     protocol    = var.ingress_protocol
+#     cidr_blocks = var.ingress_cidr_blocks  
+#   }
 
-  tags = {
-    SCC_Jenkins = var.scc_jenkins
-    Owner       = var.owner
-    CostCenter  = var.cost_center
-    Environment = var.environment
-  }
-}
+#   tags = {
+#     SCC_Jenkins = var.scc_jenkins
+#     Owner       = var.owner
+#     CostCenter  = var.cost_center
+#     Environment = var.environment
+#   }
+# }
 
 # ---- RDS Instance ----  
 resource "aws_db_instance" "test_db" {
@@ -97,7 +97,7 @@ resource "aws_db_instance" "test_db" {
   copy_tags_to_snapshot     = var.copy_tags_to_snapshot
   delete_automated_backups  = var.delete_automated_backups
   # vpc_security_group_ids    = var.operation == "create" ? [aws_security_group.scc_postgres_dbsg.id] : [data.aws_security_group.selected.id]
-  vpc_security_group_ids = [aws_security_group.scc_postgres_dbsg.id]
+  vpc_security_group_ids = [data.aws_security_group.selected.id]
   skip_final_snapshot       = var.skip_final_snapshot
   multi_az = var.multi_az
 
