@@ -17,7 +17,7 @@ subnet_group_name        = "terraform-subnet-group"
 subnet_group_description = "Example subnet group for RDS"
 multi_az = true
 
-security_group_name  = "terraform-sg"
+security_group_name  = "new-sg-1"
 
 #Security group will not be created every time 
 # security_group_description = "Enable Postgres access"
