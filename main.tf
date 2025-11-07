@@ -24,7 +24,6 @@ resource "aws_db_subnet_group" "example" {
 }
 
 data "aws_security_group" "selected" {
-  count = var.create_security_group ? 0 : 1 
   filter {
     name   = "group-name"
     values = [var.security_group_name]
